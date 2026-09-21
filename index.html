@@ -25,6 +25,16 @@ main{padding:26px 0 50px}.grid4{display:grid;grid-template-columns:repeat(4,1fr)
 .footer{background:#071c34;color:#b9c8d8;padding:24px 0}.footer b{color:#fff}
 @media(max-width:950px){.grid4{grid-template-columns:repeat(2,1fr)}.chartGrid{grid-template-columns:1fr}.timeline{grid-template-columns:repeat(3,1fr)}.heroStats{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:600px){.grid4{grid-template-columns:1fr 1fr;gap:9px}.card{padding:14px}.metric .num{font-size:23px}.timeline{grid-template-columns:1fr 1fr}.brand{display:block}.badge{display:inline-block;margin-top:12px}.riskTable th:nth-child(3),.riskTable td:nth-child(3){display:none}.heroStats{gap:8px}.heroStat b{font-size:20px}}
+.footer{position:relative;background:radial-gradient(ellipse at top,#0d3a63 0%,#071c34 60%);color:#b9c8d8;padding:42px 0 28px;margin-top:20px;overflow:hidden;text-align:center}
+.footer:before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--cyan),var(--blue),var(--violet))}
+.footer:after{content:"";position:absolute;width:420px;height:420px;border-radius:50%;left:50%;bottom:-320px;transform:translateX(-50%);background:radial-gradient(circle,rgba(18,184,230,.14),transparent 70%)}
+.footer-inner{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:10px}
+.footer-brand{display:inline-flex;align-items:center;gap:9px;font-weight:900;font-size:16px;letter-spacing:.3px;color:#fff}
+.footer-dot{width:9px;height:9px;border-radius:50%;background:linear-gradient(135deg,var(--cyan),var(--blue));box-shadow:0 0 0 5px rgba(18,184,230,.16)}
+.footer-divider{width:52px;height:2px;border-radius:2px;background:linear-gradient(90deg,var(--cyan),var(--blue));opacity:.7;margin:2px 0}
+.footer-note{font-size:13px;color:#dce7f2;font-weight:600}
+.footer-copy{font-size:12px;color:#8ea3ba}
+.footer-copy b{color:#cfe0f2;font-weight:700}
 </style>
 </head>
 <body>
@@ -110,10 +120,13 @@ main{padding:26px 0 50px}.grid4{display:grid;grid-template-columns:repeat(4,1fr)
 </main>
 
 <!-- <footer class="footer"><div class="wrap"><b>RISK MANAGEMENT GROUP</b><br>RCSA Monitoring 2024–2026 • Internal Management Dashboard<br><span style="font-size:12px">© 2026 Risk Management Group. All rights reserved.</span></div></footer> -->
-<footer class="footer"><div class="wrap" text-align="center"<<b>
-  <div class="footer-brand"><span class="footer-dot"></span> Risk Management Group</div>
-  <div class="footer-copy">© <span id="copyrightYear"></span> Operational Risk Management & MRTI — All rights reserved.</div>
-  <div class="footer-note">Buku Saku Business Continuity Management (BCM)</div>
+<footer class="footer">
+  <div class="wrap footer-inner">
+    <div class="footer-brand"><span class="footer-dot"></span> Risk Management Group</div>
+    <div class="footer-divider"></div>
+    <div class="footer-note">Monitoring RCSA — PT BRI Multifinance Indonesia</div>
+    <div class="footer-copy">© <span id="copyrightYear"></span> <b>Operational &amp; IT Risk Management</b> — All rights reserved.</div>
+  </div>
 </footer>
   
 <script>
@@ -159,6 +172,7 @@ function improvement(d,lv){
   const x=riskTotals(d,lv); if(!x.irs||!x.rrs) return null;
   const a=weighted(x.irs),b=weighted(x.rrs); return a?((a-b)/a)*100:null;
 }
+
 function renderTabs(){
   const tabs=document.getElementById("periodTabs"); tabs.innerHTML="";
   getSelectedPeriods().forEach(k=>{
@@ -230,10 +244,13 @@ function renderInsights(){
   document.getElementById("insControl").textContent=imp==null?`${d.label}: data IRS/RRS belum lengkap untuk menghitung indeks kontrol.`:`${d.label}: weighted risk index turun sekitar ${imp.toFixed(1)}% dari IRS ke RRS pada level yang dipilih.`;
   const top=(level==="kc"?d.top_kc:d.top_ho)[0]; document.getElementById("insPriority").textContent=`Risk code ${top[0]} — ${top[1]} menjadi salah satu prioritas utama pada ${d.label}.`;
 }
+  document.getElementById("copyrightYear").textContent = new Date().getFullYear();
+  
 function renderAll(){renderTabs();updateHero();renderRiskChart();renderTrend();renderUnitChart();renderAttentionChart();renderTop();renderInsights()}
 document.getElementById("year").onchange=renderAll; document.getElementById("sem").onchange=renderAll;
 document.querySelectorAll(".toggle").forEach(b=>b.onclick=()=>{document.querySelectorAll(".toggle").forEach(x=>x.classList.remove("active"));b.classList.add("active");level=b.dataset.level;renderAll()});
 renderAll();
+  
 </script>
 </body>
 </html>
